@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+
+<BorderPane fx:id="mainBorderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.StudentController">
+   <left>
+      <Pane prefHeight="600.0" prefWidth="144.0" style="-fx-background-color: gray;" BorderPane.alignment="CENTER">
+         <children>
+            <Rectangle arcHeight="100.0" arcWidth="100.0" fill="#bfbfbf" height="537.0" layoutX="33.0" layoutY="32.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="93.0" />
+            <ImageView fx:id="userIcon" fitHeight="50.0" fitWidth="56.0" layoutX="55.0" layoutY="79.0" onMouseClicked="#showUser" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+               <image>
+                  <Image url="@images/user.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="testIcon" fitHeight="51.0" fitWidth="57.0" layoutX="54.0" layoutY="175.0" onMouseClicked="#showTest" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+               <image>
+                  <Image url="@images/test.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="targetIcon" fitHeight="50.0" fitWidth="50.0" layoutX="56.0" layoutY="276.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+               <image>
+                  <Image url="@images/target.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="calculatorIcon" fitHeight="49.0" fitWidth="62.0" layoutX="56.0" layoutY="371.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+               <image>
+                  <Image url="@images/calculator.png" />
+               </image>
+            </ImageView>
+            <ImageView fx:id="logoutIcon" fitHeight="48.0" fitWidth="51.0" layoutX="57.0" layoutY="480.0" pickOnBounds="true" preserveRatio="true" styleClass="icon">
+               <image>
+                  <Image url="@images/logout.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
+   </left>
+   <center>
+      <StackPane prefHeight="600.0" prefWidth="551.0" style="-fx-background-color: gray;" BorderPane.alignment="CENTER">
+         <children>
+            <Label prefHeight="69.0" prefWidth="483.0" text="ABAD, Angel Lyka D." textFill="WHITE">
+               <font>
+                  <Font name="System Bold Italic" size="45.0" />
+               </font>
+               <StackPane.margin>
+                  <Insets bottom="500.0" right="200.0" />
+               </StackPane.margin>
+            </Label>
+            <ImageView fitHeight="234.0" fitWidth="230.0" pickOnBounds="true" preserveRatio="true">
+               <StackPane.margin>
+                  <Insets bottom="250.0" left="400.0" />
+               </StackPane.margin>
+               <image>
+                  <Image url="@images/lyka.png" />
+               </image>
+            </ImageView>
+            <Label prefHeight="69.0" prefWidth="483.0" text="BS Biology II - A" textFill="WHITE">
+               <font>
+                  <Font name="System Bold Italic" size="27.0" />
+               </font>
+               <StackPane.margin>
+                  <Insets bottom="400.0" right="200.0" />
+               </StackPane.margin>
+            </Label>
+            <ImageView fitHeight="234.0" fitWidth="230.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@images/logo.png" />
+               </image>
+               <StackPane.margin>
+                  <Insets left="400.0" top="300.0" />
+               </StackPane.margin>
+            </ImageView>
+         </children>
+      </StackPane>
+   </center>
+</BorderPane>
