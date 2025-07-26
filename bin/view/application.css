@@ -38,3 +38,7 @@
 	-fx-scale-x: 1.1;
 	-fx-scale-y: 1.1;
 }
+
+.textArea {
+	-fx-text-alignment: center;
+}

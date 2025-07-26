@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
@@ -29,6 +30,8 @@ public class LoginController {
 	private Button exitButton;
 	@FXML
 	private Button loginButton;
+	@FXML
+	private Label invalid;
 	
 	private Stage stage;
 	private Scene scene;
@@ -42,6 +45,8 @@ public class LoginController {
 			System.out.print("success");
 			ShowScene scene = new ShowScene();
 			scene.showUser(e);
+		} else {
+			invalid.setText("Invalid account, try again.");
 		}
 	}
 	

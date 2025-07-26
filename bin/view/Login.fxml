@@ -8,7 +8,6 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-
 <AnchorPane fx:id="loginPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="300.0" style="-fx-background-color: gray;" styleClass="loginPane" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.LoginController">
    <children>
       <Button fx:id="exitButton" layoutX="262.0" layoutY="14.0" mnemonicParsing="false" onAction="#exit" prefHeight="16.0" prefWidth="17.0" styleClass="exitButton">
@@ -45,5 +44,10 @@
          </font>
       </Label>
       <Button fx:id="loginButton" layoutX="26.0" layoutY="298.0" mnemonicParsing="false" onAction="#login" prefHeight="25.0" prefWidth="253.0" styleClass="loginButton" text="Login" textFill="WHITE" />
+      <Label fx:id="invalid" layoutX="24.0" layoutY="263.0" onInputMethodTextChanged="#login" prefHeight="25.0" prefWidth="217.0" textAlignment="CENTER" textFill="#ff2f2f">
+         <font>
+            <Font name="Gadugi" size="14.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

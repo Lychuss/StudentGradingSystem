@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import application.Main;
+import javafx.scene.control.Alert;
 import model.Scores;
 import model.ScoresTableView;
 
@@ -89,9 +91,13 @@ public class DatabaseConnection {
 			stmt.setInt(3, id);
 			stmt.execute();
 			stmt.close();
-		} catch (SQLException e) {
-			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
-		}
+		} catch (SQLException m) {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setHeaderText(null);
+			alert.setTitle("Error, can't add");
+			alert.setContentText("Refresh First");
+			alert.showAndWait();
+		} 
 	}
 	
 	public static boolean removeData(int id) {
@@ -107,6 +113,16 @@ public class DatabaseConnection {
 		} catch (SQLException e) {
 			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
 			return false;
+		}
+	}
+	
+	public static void refreshData(String str) {
+		try {
+			PreparedStatement stmt = con.prepareStatement(str);
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException e) {
+			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
 		}
 	}
 }
