@@ -158,7 +158,8 @@ public class TestController {
 			PieChart.Data pie1 = new PieChart.Data("Percent Lacking", (int) Scores.lackPercent());
 			pieChart.add(pie1);
 			myPieChart.setData(pieChart);
-			grade.setText(Double.toString(Scores.overallPercent()) + "%");
+			grade.appendText(Double.toString(Scores.overallPercent()) + "%");
+			grade.setEditable(false);
 		}
 	}
 }

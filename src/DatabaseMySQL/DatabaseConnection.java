@@ -7,6 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -16,6 +19,8 @@ import application.Main;
 import javafx.scene.control.Alert;
 import model.Scores;
 import model.ScoresTableView;
+import model.ToDo;
+import model.User;
 
 public class DatabaseConnection {
 	
@@ -51,11 +56,13 @@ public class DatabaseConnection {
 			rs = stmt.executeQuery();
 			
 			while(rs.next()) {
-				String sqlUsername = rs.getString("usernames");
-				String sqlPassword = rs.getString("passwords");
+				String sqlUsername = rs.getString(1);
+				String sqlPassword = rs.getString(2);
+				String sqlId = rs.getString(3);
 				
 				if(sqlUsername.equals(username) && sqlPassword.equals(password)) {
 					System.out.println("Login Successfully!");
+					User.setId(Integer.parseInt(sqlId));
 					check = true;
 				}
 			}
@@ -123,6 +130,66 @@ public class DatabaseConnection {
 			stmt.close();
 		} catch (SQLException e) {
 			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
+		}
+	}
+	
+	public static void addTask(String task, LocalDate dueDate, LocalTime dueTime, String subject, String type, String level, int id) {
+		try {
+			PreparedStatement stmt = con.prepareStatement("INSERT INTO tasks (`task`, `date due`, `time due`, `subject`, `type`, `level`, `id`) VALUE (?, ?, ?, ?, ?, ?, ?)");
+			stmt.setString(1, task);
+			stmt.setString(2, dueDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+			stmt.setString(3, dueTime.format(DateTimeFormatter.ofPattern("hh:mm a")));
+			stmt.setString(4, subject);
+			stmt.setString(5, type);
+			stmt.setString(6, level);
+			stmt.setString(7, Integer.toString(id));
+			stmt.execute();
+			System.out.println("added successfully");
+			stmt.close();
+		} catch (SQLException e) {
+			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
+		}
+	}
+	
+	public static ArrayList<ToDo> storeList(int id) {
+		ArrayList<ToDo> list = new ArrayList<>();
+		try {
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM tasks");
+			rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				String tasks = rs.getString(1);
+				String dueDate = rs.getString(2);
+				String dueTime = rs.getString(3);
+				String[] parts = dueTime.split(" ");
+				String subject = rs.getString(4);
+				String type = rs.getString(5);
+				String level = rs.getString(6);
+				int id2 = Integer.parseInt(rs.getString(7));
+				int id1 = Integer.parseInt(rs.getString(8));
+				
+				if(id2 == id) {
+				ToDo task = new ToDo(tasks, LocalDate.parse(dueDate), LocalTime.parse(parts[0]), parts[1], subject, type, level, id1);
+				list.add(task);
+			   }
+			}
+			return list;
+		} catch (SQLException e) {
+			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
+			return null;
+		} 
+	}
+	
+	public static boolean completeTask(int id) {
+			System.out.println(id);
+		try {
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM tasks WHERE taskid = ?");
+			stmt.setInt(1, id);
+			stmt.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
+			return false;
 		}
 	}
 }

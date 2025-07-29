@@ -9,7 +9,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class ShowScene {
 
@@ -48,5 +50,22 @@ public class ShowScene {
 		mainBorder.setCenter(centerContent);
 	}
 	
+	public void showToDo(BorderPane mainBorder) throws IOException {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ToDo.fxml"));
+		Parent centerContent = loader.load();
+		mainBorder.setCenter(centerContent);
+	}
 	
+	public void showNewTask(ActionEvent e) throws IOException {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ToDoNewTask.fxml"));
+		Parent root = loader.load();
+		Stage primaryStage = new Stage();
+		Scene scene = new Scene(root);
+		scene.getStylesheets().add(getClass().getResource("/view/application.css").toExternalForm());
+		primaryStage.setScene(scene);
+		primaryStage.initStyle(StageStyle.UNDECORATED);
+		primaryStage.initStyle(StageStyle.TRANSPARENT);
+		scene.setFill(Color.TRANSPARENT);
+		primaryStage.show();
+	}
 }

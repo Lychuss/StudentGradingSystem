@@ -5,6 +5,7 @@ public class User {
 
 	private String username;
 	private String password;
+	public static int id;
 	
 	public User(String username, String password){
 		this.username = username;
@@ -17,6 +18,14 @@ public class User {
 	
 	public String getPassword() {
 		return password;
+	}
+	
+	public static int getId() {
+		return id;
+	}
+	
+	public static void setId(int id1) {
+		id = id1;
 	}
 	
 	public void setUsername(String username) {

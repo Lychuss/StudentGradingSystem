@@ -33,4 +33,8 @@ public class StudentController {
 		scene.showUser(e);
 	}
 
+	public void showToDo(MouseEvent e) throws IOException {
+		ShowScene scene = new ShowScene();
+		scene.showToDo(mainBorderPane);
+	}
 }
