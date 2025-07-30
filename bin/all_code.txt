@@ -1,0 +1,1007 @@
+package application;
+import DatabaseMySQL.DatabaseConnection;
+
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
+
+
+public class Main extends Application {
+	
+	@Override
+	public void start(Stage primaryStage) {
+		try {
+			DatabaseConnection.createConnection();
+			Parent root = FXMLLoader.load(getClass().getResource("/view/Login.fxml"));
+			Scene scene = new Scene(root);
+			scene.getStylesheets().add(getClass().getResource("/view/application.css").toExternalForm());
+			primaryStage.setScene(scene);
+			primaryStage.initStyle(StageStyle.UNDECORATED);
+			primaryStage.initStyle(StageStyle.TRANSPARENT);
+			scene.setFill(Color.TRANSPARENT);
+			primaryStage.show();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void main(String[] args) {
+		launch(args);	
+	}	
+	
+}
+package controller;
+import model.User;
+
+import java.io.IOException;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+
+public class LoginController {
+	
+	@FXML 
+	private TextField usernameField;
+	@FXML
+	private PasswordField passwordField;
+	@FXML
+	private Button exitButton;
+	@FXML
+	private Button loginButton;
+	@FXML
+	private Label invalid;
+	
+	private Stage stage;
+	private Scene scene;
+	private Parent root;
+	
+	public void login(ActionEvent e) throws IOException {
+		String userName = usernameField.getText();
+		String passWord = passwordField.getText();
+		
+		if(User.getUsers(userName, passWord)) {
+			System.out.print("success");
+			ShowScene scene = new ShowScene();
+			scene.showUser(e);
+		} else {
+			invalid.setText("Invalid account, try again.");
+		}
+	}
+	
+	public void exit(ActionEvent e) {
+		Stage stage = (Stage) exitButton.getScene().getWindow();
+		stage.close();
+	}
+	
+}
+package controller;
+import model.ToDo;
+
+import java.io.IOException;
+import java.time.LocalTime;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.stage.Stage;
+
+public class NewTaskController {
+
+	@FXML 
+	private TextArea taskArea;
+	@FXML
+	private DatePicker dueDate;
+	@FXML
+	private TextField timeField;
+	@FXML
+	private TextField ampmField;
+	@FXML
+	private TextField subjectField;
+	@FXML
+	private ChoiceBox<String> typeChoiceBox = new ChoiceBox<>();
+	@FXML
+	private ChoiceBox<String> levelChoiceBox = new ChoiceBox<>();
+	@FXML 
+	private Button addButton;
+	
+	public void add(ActionEvent e) throws IOException {
+		String[] parts = timeField.getText().split(":");
+		int hours = Integer.parseInt(parts[0]);
+		int minutes = Integer.parseInt(parts[1]);
+		
+		if(ampmField.getText().equalsIgnoreCase("PM")) {
+			hours += 12;
+		}
+		
+		ToDo task = new ToDo(
+				taskArea.getText(), dueDate.getValue(), 
+				LocalTime.of(hours, minutes), ampmField.getText(), subjectField.getText(), 
+				typeChoiceBox.getValue(), levelChoiceBox.getValue(), 0
+			);
+		
+		task.addTask();
+		
+		Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
+		stage.close();
+	}
+	
+	@FXML
+	public void initialize() {
+		typeChoiceBox.getItems().addAll("Quiz", "Midterm Exam", "Exam", "Project", "Long Quiz", "Groupings", "Assignment", "Task", "Review");
+		levelChoiceBox.getItems().addAll("To Do", "Need", "Immediate", "Crucial");
+	}
+}
+package controller;
+
+import java.io.IOException;
+
+import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+
+public class ShowScene {
+
+	private Stage stage;
+	private Scene scene;
+	private Parent  root;
+	
+	public void showUser(ActionEvent e) throws IOException {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Student.fxml"));
+		root = loader.load();
+		
+		stage = (Stage)((Node)e.getSource()).getScene().getWindow();
+		scene = new Scene(root);
+		stage.setScene(scene);
+		stage.centerOnScreen();
+		stage.setResizable(false);
+		stage.show();
+	}
+	
+	public void showUser(MouseEvent e) throws IOException {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Student.fxml"));
+		root = loader.load();
+		
+		stage = (Stage)((Node)e.getSource()).getScene().getWindow();
+		scene = new Scene(root);
+		stage.setScene(scene);
+		stage.centerOnScreen();
+		stage.setResizable(false);
+		stage.show();
+	}
+
+	
+	public void showTest(BorderPane mainBorder) throws IOException {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/Test.fxml"));
+		Parent centerContent = loader.load();
+		mainBorder.setCenter(centerContent);
+	}
+	
+	public void showToDo(BorderPane mainBorder) throws IOException {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ToDo.fxml"));
+		Parent centerContent = loader.load();
+		mainBorder.setCenter(centerContent);
+	}
+	
+	public void showNewTask(ActionEvent e) throws IOException {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ToDoNewTask.fxml"));
+		Parent root = loader.load();
+		Stage primaryStage = new Stage();
+		Scene scene = new Scene(root);
+		scene.getStylesheets().add(getClass().getResource("/view/application.css").toExternalForm());
+		primaryStage.setScene(scene);
+		primaryStage.initStyle(StageStyle.UNDECORATED);
+		primaryStage.initStyle(StageStyle.TRANSPARENT);
+		scene.setFill(Color.TRANSPARENT);
+		primaryStage.show();
+	}
+}
+package controller;
+
+import java.io.IOException;
+
+import javafx.fxml.FXML;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+
+public class StudentController {
+	
+
+	@FXML
+	private ImageView userIcon;
+	@FXML
+	private ImageView testIcon;
+	@FXML
+	private ImageView targetIcon;
+	@FXML
+	private ImageView calculatorIcon;
+	@FXML
+	private ImageView logoutIcon;
+	@FXML
+	private BorderPane mainBorderPane;
+	
+	public void showTest(MouseEvent e) throws IOException {
+		ShowScene scene = new ShowScene();
+		scene.showTest(mainBorderPane);
+	}
+	
+	public void showUser(MouseEvent e) throws IOException {
+		ShowScene scene = new ShowScene();
+		scene.showUser(e);
+	}
+
+	public void showToDo(MouseEvent e) throws IOException {
+		ShowScene scene = new ShowScene();
+		scene.showToDo(mainBorderPane);
+	}
+}
+package controller;
+
+import DatabaseMySQL.DatabaseConnection;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.chart.PieChart;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.RadioButton;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.cell.PropertyValueFactory;
+import model.Scores;
+import model.ScoresTableView;
+
+public class TestController {
+	
+	@FXML
+	private TextField score;
+	@FXML
+	private TextField total;
+	@FXML
+	private TableView<ScoresTableView> scoreTableView;
+	@FXML
+	private TableColumn<ScoresTableView, String> scoreColumn;
+	@FXML
+	private TableColumn<ScoresTableView, String> totalColumn;
+	@FXML
+	private TableColumn<ScoresTableView, Void> removeColumn;
+	@FXML
+	private Button addButton;
+	@FXML
+	private Button refreshButton;
+	@FXML
+	private TextArea totalScore;
+	@FXML
+	private TextArea computedPercentage;
+	@FXML
+	private TextArea grade;
+	@FXML
+	private TextField percentage;
+	@FXML
+	private Button computeButton;
+	@FXML
+	private PieChart myPieChart;
+	@FXML
+	private RadioButton writtenWorks;
+	@FXML
+	private RadioButton performanceTask;
+	@FXML
+	private RadioButton exam;
+	@FXML
+	private ToggleGroup percentGroup;
+	
+	private int id = 0;
+	
+	private ObservableList<PieChart.Data> pieChart = FXCollections.observableArrayList();
+	
+	public void initialize() {
+		scoreColumn.setCellValueFactory(new PropertyValueFactory<>("score"));
+		totalColumn.setCellValueFactory(new PropertyValueFactory<>("total"));
+		removeColumn.setCellFactory(col -> new TableCell<>() {
+			private final Button btn = new Button("Remove");
+		{	
+			btn.setOnAction(event -> {
+				ScoresTableView data = getTableView().getItems().get(getIndex());
+				if(DatabaseConnection.removeData(getIndex())) {
+					id--;
+					 getTableView().getItems().remove(data);
+				}
+				
+				
+			});
+		}
+		
+		@Override
+		protected void updateItem(Void item, boolean empty) {
+			super.updateItem(item, empty);
+
+			if (empty) {
+				setGraphic(null);
+			} else {
+				setGraphic(btn); 
+			}
+		}
+	});
+}
+	
+	public void initialize1() {
+		
+	}
+	
+	public void refresh(ActionEvent e) {
+		DatabaseConnection.refreshData("TRUNCATE TABLE test");
+		loadTable();
+		id = 0;
+		totalScore.setText(null);
+		computedPercentage.setText(null);
+		percentage.setText(null);
+		grade.setText(null);
+		Scores.percents.clear();
+		Scores.str.clear();
+		pieChart.clear();
+	}
+	
+	public void add(ActionEvent e) {
+	try {
+		id++;
+		Scores values = new Scores(Integer.parseInt(score.getText()), Integer.parseInt(total.getText()), id);
+		values.add();
+		loadTable();
+		totalScore.setText("  "+Integer.toString(Scores.totalScore()) + '/' + Integer.toString(Scores.inTotal()));
+	} catch (NumberFormatException n){
+		 Alert alert = new Alert(Alert.AlertType.ERROR);
+		 alert.setTitle("INVALID INPUT");
+		 alert.setHeaderText(null);
+		 alert.setContentText("Must be a number!");
+		 alert.showAndWait();
+	}
+	}
+	
+	public void loadTable() {
+		if(Scores.scores.isEmpty()) {
+			System.out.println("No value");
+		}
+		
+		Scores.scores.clear();
+		DatabaseConnection.getScores();
+		
+		ObservableList<ScoresTableView> scores = FXCollections.observableArrayList();
+
+		for(Scores i : Scores.scores) {
+			ScoresTableView list = new ScoresTableView(Integer.toString(i.getScore()), Integer.toString(i.getTotal()));
+			scores.add(list);
+		}
+		scoreTableView.setItems(scores);
+	}
+	
+	public void compute(ActionEvent e) {
+		computedPercentage.setText("   "+ Double.toString(Scores.computedPercent(Integer.parseInt(percentage.getText()))) + "%");
+		RadioButton button = (RadioButton) percentGroup.getSelectedToggle();
+		String selectedValue = button.getText();
+		
+		Scores.str.add(selectedValue);
+		Scores.percents.add((double)(Scores.computedPercent(Integer.parseInt(percentage.getText()))));
+		
+		PieChart.Data pie = new PieChart.Data(selectedValue, (int)(Scores.computedPercent(Integer.parseInt(percentage.getText()))));
+		pieChart.add(pie);
+		System.out.println((int)(Scores.computedPercent(Integer.parseInt(percentage.getText()))));
+		
+		if(Scores.str.size() == 3) {
+			PieChart.Data pie1 = new PieChart.Data("Percent Lacking", (int) Scores.lackPercent());
+			pieChart.add(pie1);
+			myPieChart.setData(pieChart);
+			grade.appendText(Double.toString(Scores.overallPercent()) + "%");
+			grade.setEditable(false);
+		}
+	}
+}
+package controller;
+import model.ToDo;
+import model.User;
+import java.io.IOException;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressBar;
+import javafx.scene.control.TextArea;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+
+public class ToDoController {
+
+	@FXML
+	private Label taskLabelNeed;
+	@FXML
+	private Label whenLabelNeed;
+	@FXML
+	private Label levelLabelNeed;
+	@FXML 
+	private Label taskLabelImmediate;
+	@FXML 
+	private Label whenLabelImmediate;
+	@FXML 
+	private Label levelLabelImmediate;
+	@FXML 
+	private Label taskLabelCrucial;
+	@FXML 
+	private Label whenLabelCrucial;
+	@FXML 
+	private Label levelLabelCrucial;
+	@FXML
+	private Button newTaskButton;
+	@FXML
+	private Button refreshButton;
+	@FXML
+	private ProgressBar progressBar;
+	@FXML
+	private TextArea pendingToDo;
+	@FXML
+	private TextArea completedToDo;
+	@FXML 
+	private ListView<ToDo> listView;
+	
+	@FXML
+	public void initialize() {
+		loadTable();
+		
+		listView.setCellFactory(param -> new ListCell<ToDo>() {
+			private final ImageView plus = new ImageView(getClass().getResource("/view/images/completed.png").toExternalForm());
+			private final Button button = new Button();
+			private final Label label1 = new Label();
+			private final Label label2 = new Label();
+			private final Label label3 = new Label();
+			private final Label label4 = new Label();
+			private final VBox vbox = new VBox(10, label1, label2, label3, label4, button);
+			{
+				button.setOnAction(e -> {
+					ToDo item = getItem();
+					if(item != null && ToDo.completed(item.getId())) {
+						getListView().getItems().remove(item);
+						System.out.println(item.getId());
+					}
+				});
+				
+		        button.setPrefSize(24, 24);
+		        button.setMinSize(24, 24);
+		        button.setMaxSize(24, 24);
+
+		        plus.setPreserveRatio(true);
+		        plus.setFitWidth(16); 
+		        plus.setFitHeight(16);
+
+		        button.setGraphic(plus);
+
+		        button.setText(null);
+
+			}
+			
+			@Override
+			protected void updateItem(ToDo item, boolean empty) {
+				super.updateItem(item, empty);
+				if(empty || item == null) {
+					setGraphic(null);
+				} else {
+					label1.setText("Task: ".toUpperCase() + item.getTask());
+					label1.setStyle("-fx-font-weight: bold;");
+					label2.setText("Due Date: ".toUpperCase() + item.getDueDate() + " || " + item.getDueTime() + item.getDay());
+					label2.setStyle("-fx-font-weight: bold;");
+					label3.setText("Type: ".toUpperCase() + item.getType());
+					label3.setStyle("-fx-font-weight: bold;");
+					label4.setText("Subject: ".toUpperCase() + item.getSubject());
+					label4.setStyle("-fx-font-weight: bold;");
+					button.setStyle("-fx-background-color: transparent;");
+					vbox.setStyle("-fx-background-color: rgba(228, 251, 130, 0.8);");
+					setGraphic(vbox);
+				}
+			}
+		});
+	}	
+	
+	public void loadTable() {
+		ObservableList<ToDo> list = FXCollections.observableArrayList(ToDo.getItems(User.getId()));
+		listView.setItems(list);
+	}
+	
+	public void addTask(ActionEvent e) throws IOException {
+		ShowScene scene = new ShowScene();
+		scene.showNewTask(e);
+	}
+	
+	public void refresh(ActionEvent e) {
+		System.out.print("HELLO");
+		loadTable();
+		initialize();
+	}
+}
+package DatabaseMySQL;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.Statement;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import application.Main;
+import javafx.scene.control.Alert;
+import model.Scores;
+import model.ScoresTableView;
+import model.ToDo;
+import model.User;
+
+public class DatabaseConnection {
+	
+	static Connection con;
+	static ResultSet rs;
+	
+	public static void createConnection() {
+		try {
+			Class.forName("com.mysql.cj.jdbc.Driver");
+			con = DriverManager.getConnection("jdbc:mysql://localhost:3306/studentgradingsystem", "root", "Tokitoclaude0907@");
+			System.out.println("hello");
+		} catch (ClassNotFoundException | SQLException e) {
+			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
+		}
+	}
+	
+	public static void storeUsers(String username, String password) {
+		try {
+			PreparedStatement stmt = con.prepareStatement("INSER INTO users VALUE (?, ?)");
+			stmt.setString(1, username);
+			stmt.setString(2, password);
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException e) {
+			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
+		}
+	}
+	
+	public static boolean loginUser(String username, String password) {
+		boolean check = false;
+		try {
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM users");
+			rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				String sqlUsername = rs.getString(1);
+				String sqlPassword = rs.getString(2);
+				String sqlId = rs.getString(3);
+				
+				if(sqlUsername.equals(username) && sqlPassword.equals(password)) {
+					System.out.println("Login Successfully!");
+					User.setId(Integer.parseInt(sqlId));
+					check = true;
+				}
+			}
+		} catch (SQLException e) {
+			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
+		}
+		System.out.println(check);
+		return check;
+	}
+	
+	public static void getScores() {
+		try {
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM test");
+			rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				String scores = rs.getString(1);
+				String totals = rs.getString(2);
+				String index = rs.getString(3);
+				Scores score = new Scores(Integer.parseInt(scores), Integer.parseInt(totals), Integer.parseInt(index));
+				Scores.scores.add(score);
+			}
+		} catch (SQLException e) {
+			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
+		}
+	}
+	
+	public static void addScoresTotal(int score, int total, int id) {
+		try {
+			PreparedStatement stmt = con.prepareStatement("INSERT INTO test VALUE (?, ?, ?)");
+			stmt.setInt(1, score);
+			stmt.setInt(2, total);
+			stmt.setInt(3, id);
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException m) {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setHeaderText(null);
+			alert.setTitle("Error, can't add");
+			alert.setContentText("Refresh First");
+			alert.showAndWait();
+		} 
+	}
+	
+	public static boolean removeData(int id) {
+		 int remove = id + 1;
+		try {
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM test WHERE id = ?");
+			stmt.setInt(1, remove);
+			stmt.executeUpdate();
+	        Statement resetIdStmt = con.createStatement();
+	        resetIdStmt.execute("SET @new_id = 0");
+	        resetIdStmt.execute("UPDATE test SET id = (@new_id := @new_id + 1)");
+			return true;
+		} catch (SQLException e) {
+			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
+			return false;
+		}
+	}
+	
+	public static void refreshData(String str) {
+		try {
+			PreparedStatement stmt = con.prepareStatement(str);
+			stmt.execute();
+			stmt.close();
+		} catch (SQLException e) {
+			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
+		}
+	}
+	
+	public static void addTask(String task, LocalDate dueDate, LocalTime dueTime, String subject, String type, String level, int id) {
+		try {
+			PreparedStatement stmt = con.prepareStatement("INSERT INTO tasks (`task`, `date due`, `time due`, `subject`, `type`, `level`, `id`) VALUE (?, ?, ?, ?, ?, ?, ?)");
+			stmt.setString(1, task);
+			stmt.setString(2, dueDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+			stmt.setString(3, dueTime.format(DateTimeFormatter.ofPattern("hh:mm a")));
+			stmt.setString(4, subject);
+			stmt.setString(5, type);
+			stmt.setString(6, level);
+			stmt.setString(7, Integer.toString(id));
+			stmt.execute();
+			System.out.println("added successfully");
+			stmt.close();
+		} catch (SQLException e) {
+			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
+		}
+	}
+	
+	public static ArrayList<ToDo> storeList(int id) {
+		ArrayList<ToDo> list = new ArrayList<>();
+		try {
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM tasks");
+			rs = stmt.executeQuery();
+			
+			while(rs.next()) {
+				String tasks = rs.getString(1);
+				String dueDate = rs.getString(2);
+				String dueTime = rs.getString(3);
+				String[] parts = dueTime.split(" ");
+				String subject = rs.getString(4);
+				String type = rs.getString(5);
+				String level = rs.getString(6);
+				int id2 = Integer.parseInt(rs.getString(7));
+				int id1 = Integer.parseInt(rs.getString(8));
+				
+				if(id2 == id) {
+				ToDo task = new ToDo(tasks, LocalDate.parse(dueDate), LocalTime.parse(parts[0]), parts[1], subject, type, level, id1);
+				list.add(task);
+			   }
+			}
+			return list;
+		} catch (SQLException e) {
+			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
+			return null;
+		} 
+	}
+	
+	public static boolean completeTask(int id) {
+			System.out.println(id);
+		try {
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM tasks WHERE taskid = ?");
+			stmt.setInt(1, id);
+			stmt.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
+			return false;
+		}
+	}
+}
+package model;
+import java.util.ArrayList;
+
+import DatabaseMySQL.DatabaseConnection;
+
+public class Scores {
+
+	public static ArrayList<Scores> scores = new ArrayList<>();
+	public static ArrayList<String> str = new ArrayList<>();
+	public static ArrayList<Double> percents = new ArrayList<>();
+	
+	private int score;
+	private int total;
+	private int id;
+	
+	public Scores(int score, int total, int id1){
+		this.score = score;
+		this.total = total;
+		this.id = id1;
+	}
+	
+	public int getScore() {
+		return score;
+	}
+	
+	public int getTotal() {
+		return total;
+	}
+	
+	public void setId(int id1) {
+		id = id1;
+	}
+	
+	public void add() {
+		DatabaseConnection.addScoresTotal(score, total, id);
+	}
+	
+	public static int totalScore() {
+		int score = 0;
+		for(Scores i : scores) {
+			int scores = i.getScore();
+			score += scores;
+		}
+		return score;
+	}
+	
+	public static int inTotal() {
+		int total = 0;
+		for(Scores i : scores) {
+			int totals = i.getTotal();
+			total += totals;
+		}
+		return total;
+	}
+	
+	public static double totalPercent() {
+		double totalPercent = (double) totalScore() / inTotal();
+		return totalPercent;
+	}
+	
+	public static double computedPercent(int percent) {
+		double compute = totalPercent() * percent;
+		return compute;
+	}
+	
+	public static double lackPercent() {
+		double percent = 0;
+		for(Double i : percents) {
+			percent += i;
+		}
+		double percentage = 100 - percent;
+		return percentage;
+	}
+	
+	public static double overallPercent() {
+		double percent = 0;
+		for(Double i : percents) {
+			percent += i;
+		}
+		return percent;
+	}
+}
+package model;
+
+import javafx.beans.property.SimpleStringProperty;
+
+public class ScoresTableView {
+
+	private SimpleStringProperty score;
+	private SimpleStringProperty total;
+	
+	public ScoresTableView(String score, String total){
+		this.score = new SimpleStringProperty(score);
+		this.total = new SimpleStringProperty(total);
+	}
+
+	public String getScore() {
+		return score.get();
+	}
+	
+	public String getTotal() {
+		return total.get();
+	}
+
+}
+package model;
+import DatabaseMySQL.DatabaseConnection;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+
+public class ToDo {
+
+	private String task;
+	private LocalDate dueDate;
+	private LocalTime dueTime;
+	private String subject;
+	private String type;
+	private String level;
+	private String day;
+	private int id;
+	
+	public ToDo (String task, LocalDate dueDate, LocalTime dueTime, String day, String subject, String type, String level, int id) {
+		this.task = task;
+		this.dueDate = dueDate;
+		this.dueTime = dueTime;
+		this.subject = subject;
+		this.type = type;
+		this.level = level;
+		this.day = day;
+		this.id = id;
+	}
+	
+	public String getTask() {
+		return task;
+	}
+	
+	public String getDay() {
+		return day;
+	}
+	
+	public LocalDate getDueDate() {
+		return dueDate;
+	}
+	
+	public LocalTime getDueTime() {
+		return dueTime;
+	}
+	
+	public String getSubject() {
+		return subject;
+	}
+	
+	public String getType() {
+		return type;
+	}
+	
+	public String getLevel() {
+		return level;
+	}
+	
+	public int getId() {
+		return id;
+	}
+	
+	public void setId(int id) {
+		this.id = id;
+	}
+	
+	public void setTask(String task) {
+		this.task = task;
+	}
+	
+	public void setDueDate(LocalDate dueDate) {
+		this.dueDate = dueDate;
+	}
+	
+	public void setDueTime(LocalTime dueTime) {
+		this.dueTime = dueTime;
+	}
+	
+	public void setSubject(String subject) {
+		this.subject = subject;
+	}
+	
+	public void setType(String type) {
+		this.type = type;
+	}
+	
+	public void setLevel(String level) {
+		this.level = level;
+	}
+	
+	public void setDay(String day) {
+		this.day = day;
+	}
+	
+	public void addTask() {
+		DatabaseConnection.addTask(task, dueDate, dueTime, subject, type, level, User.getId());
+	}
+	
+	public static ArrayList<ToDo> getItems(int id) {
+		return DatabaseConnection.storeList(id);
+	}
+	
+	public static boolean completed(int id) {
+		return DatabaseConnection.completeTask(id);
+	}
+}
+
+package model;
+import DatabaseMySQL.DatabaseConnection;
+
+public class User {
+
+	private String username;
+	private String password;
+	public static int id;
+	
+	public User(String username, String password){
+		this.username = username;
+		this.password = password;
+	}
+	
+	public String getUsername() {
+		return username;
+	}
+	
+	public String getPassword() {
+		return password;
+	}
+	
+	public static int getId() {
+		return id;
+	}
+	
+	public static void setId(int id1) {
+		id = id1;
+	}
+	
+	public void setUsername(String username) {
+		this.username = username;
+	}
+	
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	
+	public static boolean getUsers(String username, String password) {
+		return DatabaseConnection.loginUser(username, password);
+	}
+}

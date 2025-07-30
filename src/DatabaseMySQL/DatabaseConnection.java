@@ -192,4 +192,74 @@ public class DatabaseConnection {
 			return false;
 		}
 	}
+	
+	public static boolean inputCompleted(int complete, int id) {
+		try {
+			PreparedStatement stmt = con.prepareStatement("UPDATE completed SET completed = ? WHERE id = ?");
+			stmt.setInt(1, complete);
+			stmt.setInt(2, id);
+			stmt.execute();
+			stmt.close();
+			return true;
+		} catch(SQLException e) {
+			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
+			return false;
+		}
+	}
+	
+	public static String getComplete() {
+		String complete = null;
+		try {
+			PreparedStatement stmnt = con.prepareStatement("SELECT * FROM completed");
+			rs = stmnt.executeQuery();
+			
+			while(rs.next()) {
+				String id = rs.getString(2);
+				if(id.equalsIgnoreCase(Integer.toString(User.getId()))) {
+					complete = rs.getString(1);
+				}
+			}
+			
+		} catch (SQLException e) {
+			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
+			return null;
+		}
+		
+		return complete;
+	}
+	
+	public static boolean inputPending(int pending, int id) {
+		try {
+			PreparedStatement stmt = con.prepareStatement("UPDATE completed SET pending = ? WHERE id = ?");
+			stmt.setInt(1, pending);
+			stmt.setInt(2, id);
+			stmt.execute();
+			stmt.close();
+			return true;
+		} catch(SQLException e) {
+			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
+			return false;
+		}
+	}
+	
+	public static String getPending() {
+		String pending = null;
+		try {
+			PreparedStatement stmnt = con.prepareStatement("SELECT * FROM completed");
+			rs = stmnt.executeQuery();
+			
+			while(rs.next()) {
+				String id = rs.getString(2);
+				if(id.equalsIgnoreCase(Integer.toString(User.getId()))) {
+					pending = rs.getString(3);
+				}
+			}
+			
+		} catch (SQLException e) {
+			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
+			return null;
+		}
+		
+		return pending;
+	}
 }

@@ -101,5 +101,22 @@ public class ToDo {
 	public static boolean completed(int id) {
 		return DatabaseConnection.completeTask(id);
 	}
+	
+	public static boolean completeTask(int complete, int id) {
+		return DatabaseConnection.inputCompleted(complete, id);
+	}
+	
+	public static String getComplete() {
+		return DatabaseConnection.getComplete();
+	}
+	
+	public static boolean pendingTask(int pending, int id) {
+		return DatabaseConnection.inputPending(pending, id);
+	}
+	
+	public static String getPending() {
+		return DatabaseConnection.getPending();
+	}
+	
 }
 

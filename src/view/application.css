@@ -52,10 +52,10 @@
 }
 
 .listView {
-    -fx-padding: 10px;
-    -fx-background-color: #f9f9f9;
-    -fx-border-color: #ccc;
-    -fx-border-width: 0 0 1px 0;
+	-fx-background-color: rgba(228, 251, 130, 0.8);
+	-fx-border-radius: 20;
+	-fx-background-radius: 20;
+	-fx-border-width: 2;
 }
 
 .button-icon {
@@ -68,4 +68,59 @@
 
 .vbox {
 	-fx-background-color: rgba(228, 251, 130, 0.8);
+	-fx-border-color: black;
+	-fx-background-color: rgba(228, 251, 130, 0.8);
+	-fx-border-radius: 20;
+	-fx-background-radius: 20;
+	-fx-border-width: 2;
+	-fx-padding: 15;
+}
+
+.immediate {
+	-fx-background-color: rgba(221, 186, 0, 1);
+	-fx-border-radius: 20;
+	-fx-background-radius: 20;	
+	-fx-border-width: 2;
+}
+
+.need {
+	-fx-background-color: rgba(80, 230, 135, 1);
+	-fx-border-radius: 20;
+	-fx-background-radius: 20;	
+	-fx-border-width: 2;
+}
+
+.crucial {
+	-fx-background-color: rgba(255, 0, 0, 1);
+	-fx-border-radius: 20;
+	-fx-background-radius: 20;
+	-fx-border-width: 2;
+}
+
+.textLabel {
+	-fx-text-fill: white;
+	-fx-font-weight: bold;
+	-fx-text-alignment: center;
+}
+
+.transparent-listview {
+    -fx-background-color: transparent;
+    -fx-control-inner-background: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+    -fx-border-color: transparent;
+}
+
+.pending {
+	-fx-background-color: rgba(101, 188, 191, 0.8);
+	-fx-border-radius: 20;
+	-fx-background-radius: 20;
+	-fx-border-width: 2;
+}
+
+.completed{
+	-fx-background-color: rgba(100, 255, 95, 0.8);
+	-fx-border-radius: 20;
+	-fx-background-radius: 20;
+	-fx-border-width: 2;
 }

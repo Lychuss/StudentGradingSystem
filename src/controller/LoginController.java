@@ -9,10 +9,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -33,16 +35,16 @@ public class LoginController {
 	@FXML
 	private Label invalid;
 	
-	private Stage stage;
-	private Scene scene;
-	private Parent root;
-	
 	public void login(ActionEvent e) throws IOException {
 		String userName = usernameField.getText();
 		String passWord = passwordField.getText();
 		
 		if(User.getUsers(userName, passWord)) {
-			System.out.print("success");
+			Alert success = new Alert(Alert.AlertType.INFORMATION);
+			success.setHeaderText(null);
+			success.setTitle("Login");
+			success.setContentText("Login Successfully!");
+			success.show();
 			ShowScene scene = new ShowScene();
 			scene.showUser(e);
 		} else {
