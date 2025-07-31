@@ -17,6 +17,8 @@ import java.util.logging.Logger;
 
 import application.Main;
 import javafx.scene.control.Alert;
+import model.GeneralAverage;
+import model.Grades;
 import model.Scores;
 import model.ScoresTableView;
 import model.ToDo;
@@ -39,7 +41,7 @@ public class DatabaseConnection {
 	
 	public static void storeUsers(String username, String password) {
 		try {
-			PreparedStatement stmt = con.prepareStatement("INSER INTO users VALUE (?, ?)");
+			PreparedStatement stmt = con.prepareStatement("INSER INTO users VALUES (?, ?)");
 			stmt.setString(1, username);
 			stmt.setString(2, password);
 			stmt.execute();
@@ -92,7 +94,7 @@ public class DatabaseConnection {
 	
 	public static void addScoresTotal(int score, int total, int id) {
 		try {
-			PreparedStatement stmt = con.prepareStatement("INSERT INTO test VALUE (?, ?, ?)");
+			PreparedStatement stmt = con.prepareStatement("INSERT INTO test VALUES (?, ?, ?)");
 			stmt.setInt(1, score);
 			stmt.setInt(2, total);
 			stmt.setInt(3, id);
@@ -135,7 +137,7 @@ public class DatabaseConnection {
 	
 	public static void addTask(String task, LocalDate dueDate, LocalTime dueTime, String subject, String type, String level, int id) {
 		try {
-			PreparedStatement stmt = con.prepareStatement("INSERT INTO tasks (`task`, `date due`, `time due`, `subject`, `type`, `level`, `id`) VALUE (?, ?, ?, ?, ?, ?, ?)");
+			PreparedStatement stmt = con.prepareStatement("INSERT INTO tasks (`task`, `date due`, `time due`, `subject`, `type`, `level`, `id`) VALUES (?, ?, ?, ?, ?, ?, ?)");
 			stmt.setString(1, task);
 			stmt.setString(2, dueDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
 			stmt.setString(3, dueTime.format(DateTimeFormatter.ofPattern("hh:mm a")));
@@ -261,5 +263,101 @@ public class DatabaseConnection {
 		}
 		
 		return pending;
+	}
+	
+	public static boolean inputGrades(double grades, double units, int id) {
+		try {
+			PreparedStatement stmt = con.prepareStatement("INSERT INTO grades (`grades`, `units`, `user`) VALUES (?, ?, ?)");
+			stmt.setDouble(1, grades);
+			stmt.setDouble(2, units);
+			stmt.setInt(3, id);
+			stmt.execute();
+			stmt.close();
+			return true;
+		} catch(SQLException e) {
+			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
+		}
+		return false;
+	}
+	
+	public static ArrayList<Grades> grades(){
+		ArrayList<Grades> grades = new ArrayList<>();
+		try {
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM grades;");
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+				String grade = rs.getString(1);
+				String unit = rs.getString(2);
+				String id = rs.getString(3);
+				String user = rs.getString(4);
+				Grades avg = new Grades(Double.parseDouble(grade), Double.parseDouble(unit), Integer.parseInt(id), Integer.parseInt(user));
+				grades.add(avg);
+			}
+		} catch (SQLException e) {
+			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null ,e);
+		}
+		return grades;
+	}
+	
+	public static boolean removeGrades(int id) {
+		try {
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM grades WHERE id = ?;");
+			stmt.setInt(1, id);
+			stmt.execute();
+			stmt.close();
+			return true;
+		} catch (SQLException e) {
+			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
+		}
+		return false;
+	}
+	
+	public static double getTotalGrades() {
+		double grade = 0;
+		try {
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM grades;");
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+			 if(rs.getInt(4) == User.getId()) {
+				double grades = rs.getDouble(1);
+				double units = rs.getDouble(2);
+				grade += grades * units;
+				System.out.print(grade);
+			 }
+			}
+		} catch (SQLException e) {
+			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
+		}
+		return grade;
+	}
+	
+	public static double getTotalUnits() {
+		double unit = 0;
+		try {
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM grades;");
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+			 if(rs.getInt(4) == User.getId()) {
+				double units = rs.getDouble(2);
+				unit += units;
+			 }
+			}
+		} catch (SQLException e) {
+			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
+		}
+		return unit;
+	}
+	
+	public static boolean clearGrades(int id) {
+		try {
+			PreparedStatement stmt = con.prepareStatement("DELETE FROM grades WHERE user = ?");
+			stmt.setInt(1, id);
+			stmt.execute();
+			stmt.close();
+			return true;
+		} catch (SQLException e) {
+			Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
+		}
+		return false;
 	}
 }

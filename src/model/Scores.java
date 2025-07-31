@@ -1,7 +1,7 @@
 package model;
 import java.util.ArrayList;
-
 import DatabaseMySQL.DatabaseConnection;
+import javafx.scene.control.Label;
 
 public class Scores {
 
@@ -54,12 +54,12 @@ public class Scores {
 	}
 	
 	public static double totalPercent() {
-		double totalPercent = (double) totalScore() / inTotal();
+		double totalPercent = Math.round((double) totalScore() / inTotal() * 100.0) / 100.0;
 		return totalPercent;
 	}
 	
 	public static double computedPercent(int percent) {
-		double compute = totalPercent() * percent;
+		double compute = Math.round(totalPercent() * percent * 100.0) / 100.0;
 		return compute;
 	}
 	
@@ -78,5 +78,58 @@ public class Scores {
 			percent += i;
 		}
 		return percent;
+	}
+	
+	public static double transmutation() {
+		double initial = Math.round(overallPercent() * 100) / 100;
+		for(Transmutation i : Transmutation.transmutations) {
+			if(initial >= i.getMin() && initial <= i.getMax()) {
+				return i.getGrades();
+			} 
+		}
+		
+		return -1;
+	}
+	
+	public static double gwa() {
+		double gwa = transmutation();
+		System.out.println(gwa);
+		if(gwa >= 98 && gwa == 100) {
+			return 1.00;
+		} else if(gwa >= 95 && gwa <= 97) {
+			return 1.25;
+		} else if(gwa >= 92 && gwa <= 94) {
+			return 1.50;
+		} else if(gwa >= 89 && gwa <= 91) {
+			return 1.75;
+		} else if(gwa >= 86 && gwa <= 88) {
+			return 2.00;
+		} else if(gwa >= 83 && gwa <= 85) {
+			return 2.25;
+		} else if(gwa >= 80 && gwa <= 82) {
+			return 2.50;
+		} else if(gwa >= 77 && gwa <= 79) {
+			return 2.75;
+		} else if(gwa >= 75 && gwa <= 76) {
+			return 3.00;
+		} else if(gwa >= 70 && gwa <= 74){
+			return 4.00;
+		} else {
+			return 5.00;
+		}
+	}
+	
+	public static void failedPass(Label label) {
+		double value = gwa();
+		if(value < 4.0) {
+			label.setText("PASSED");
+			label.setStyle("-fx-text-fill: green;");
+		} else if (value == 4.0) {
+			label.setText("INC");
+			label.setStyle("-fx-text-fill: blue;");
+		} else {
+			label.setText("FAILED");
+			label.setStyle("-fx-text-fill: red;");
+		}
 	}
 }

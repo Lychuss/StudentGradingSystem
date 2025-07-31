@@ -25,6 +25,7 @@ public class ShowScene {
 		
 		stage = (Stage)((Node)e.getSource()).getScene().getWindow();
 		scene = new Scene(root);
+		scene.getStylesheets().add(getClass().getResource("/view/application.css").toExternalForm());
 		stage.setScene(scene);
 		stage.centerOnScreen();
 		stage.setResizable(false);
@@ -37,6 +38,7 @@ public class ShowScene {
 		
 		stage = (Stage)((Node)e.getSource()).getScene().getWindow();
 		scene = new Scene(root);
+		scene.getStylesheets().add(getClass().getResource("/view/application.css").toExternalForm());
 		stage.setScene(scene);
 		stage.centerOnScreen();
 		stage.setResizable(false);
@@ -52,6 +54,12 @@ public class ShowScene {
 	
 	public void showToDo(BorderPane mainBorder) throws IOException {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/ToDo.fxml"));
+		Parent centerContent = loader.load();
+		mainBorder.setCenter(centerContent);
+	}
+	
+	public void showGrade(BorderPane mainBorder) throws IOException {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/GeneralAverage.fxml"));
 		Parent centerContent = loader.load();
 		mainBorder.setCenter(centerContent);
 	}

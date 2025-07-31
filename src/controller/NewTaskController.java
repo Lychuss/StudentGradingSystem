@@ -1,19 +1,13 @@
 package controller;
 import model.ToDo;
 import model.User;
-import controller.ToDoController;
-
 import java.io.IOException;
 import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -26,6 +20,8 @@ public class NewTaskController {
 
 	@FXML 
 	private TextArea taskArea;
+	@FXML
+	private Button exitButton;
 	@FXML
 	private DatePicker dueDate;
 	@FXML
@@ -46,25 +42,35 @@ public class NewTaskController {
 	private int pending;
 	
 	public void add(ActionEvent e) throws IOException {
+		int hours = 0;
+		int minutes = 0;
 		pending = Integer.parseInt(ToDo.getPending());
 		
+	try {
 		String[] parts = timeField.getText().split(":");
-		int hours = Integer.parseInt(parts[0]);
-		int minutes = Integer.parseInt(parts[1]);
+		 hours = Integer.parseInt(parts[0]);
+		 minutes = Integer.parseInt(parts[1]);
+	} catch (RuntimeException error) {
+		alert.setHeaderText(null);
+		alert.setTitle("WARNING!");
+		alert.setContentText("Error in writing the time");
+	}
+	
 
-		ToDo task = new ToDo(
-				taskArea.getText(), dueDate.getValue(), 
-				LocalTime.of(hours, minutes), ampmField.getText(), subjectField.getText(), 
-				typeChoiceBox.getValue(), levelChoiceBox.getValue(), 0
-			);
-		
-		if(loadTable(levelChoiceBox.getValue())) {
-		pending++;
-		ToDo.pendingTask(pending, User.getId());
-		task.addTask();
-		Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
-		stage.close();
+	ToDo task = new ToDo(
+			taskArea.getText(), dueDate.getValue(), 
+			LocalTime.of(hours, minutes), ampmField.getText(), subjectField.getText(), 
+			typeChoiceBox.getValue(), levelChoiceBox.getValue(), 0
+		);
+	
+	if (loadTable(levelChoiceBox.getValue())) {
+			pending++;
+			ToDo.pendingTask(pending, User.getId());
+			task.addTask();
+			Stage stage = (Stage)((Node)e.getSource()).getScene().getWindow();
+			stage.close();
 	  }
+		
 	}
 	
 	@FXML
@@ -103,5 +109,10 @@ public class NewTaskController {
 		}
 		
 		return true;
+	}
+	
+	public void exit(ActionEvent e) {
+		Stage stage = (Stage) exitButton.getScene().getWindow();
+		stage.close();
 	}
 }

@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -21,6 +22,8 @@ import model.ScoresTableView;
 
 public class TestController {
 	
+	@FXML
+	private Label failedPass;
 	@FXML
 	private TextField score;
 	@FXML
@@ -42,7 +45,11 @@ public class TestController {
 	@FXML
 	private TextArea computedPercentage;
 	@FXML
+	private TextArea gwaArea;
+	@FXML
 	private TextArea grade;
+	@FXML
+	private TextArea transmutation;
 	@FXML
 	private TextField percentage;
 	@FXML
@@ -107,6 +114,9 @@ public class TestController {
 		Scores.percents.clear();
 		Scores.str.clear();
 		pieChart.clear();
+		gwaArea.setText(null);
+		transmutation.setText(null);
+		failedPass.setText(null);
 	}
 	
 	public void add(ActionEvent e) {
@@ -158,8 +168,14 @@ public class TestController {
 			PieChart.Data pie1 = new PieChart.Data("Percent Lacking", (int) Scores.lackPercent());
 			pieChart.add(pie1);
 			myPieChart.setData(pieChart);
-			grade.appendText(Double.toString(Scores.overallPercent()) + "%");
+			Scores.failedPass(failedPass);
+			grade.appendText(Double.toString(Math.round((Scores.overallPercent()) * 100) / 100) + "%");
 			grade.setEditable(false);
+			transmutation.appendText(Double.toString(Scores.transmutation()));
+			transmutation.setEditable(false);
+			gwaArea.appendText(Double.toString(Scores.gwa()));
+			gwaArea.setEditable(false);
+			
 		}
 	}
 }

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="600.0" prefWidth="600.0" style="-fx-background-color: gray;" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.ToDoController">
+   <children>
+      <ListView fx:id="listView" layoutX="29.0" layoutY="271.0" prefHeight="302.0" prefWidth="357.0" styleClass="transparent-listview" stylesheets="@application.css" />
+      <Button fx:id="newTaskButton" layoutX="29.0" layoutY="235.0" mnemonicParsing="false" onAction="#addTask" prefHeight="18.0" prefWidth="25.0" style="-fx-background-color: rgba(70, 251, 130, 0.8);" styleClass="newTask">
+         <graphic>
+            <VBox prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <ImageView fitHeight="20.0" fitWidth="13.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@images/plus.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </VBox>
+         </graphic>
+      </Button>
+      <ProgressBar fx:id="progressBar" layoutX="400.0" layoutY="262.0" prefHeight="18.0" prefWidth="192.0" />
+      <VBox fx:id="need" layoutX="14.0" layoutY="20.0" prefHeight="175.0" prefWidth="168.0" styleClass="need" stylesheets="@application.css">
+         <children>
+            <Label fx:id="taskLabelNeed" alignment="BASELINE_CENTER" contentDisplay="TOP" prefHeight="57.0" prefWidth="171.0" styleClass="textLabel" stylesheets="@application.css" text="Label" textAlignment="CENTER" underline="true">
+               <font>
+                  <Font name="Century Gothic" size="12.0" />
+               </font></Label>
+            <Label fx:id="whenLabelNeed" alignment="BASELINE_CENTER" prefHeight="57.0" prefWidth="171.0" styleClass="textLabel" stylesheets="@application.css" text="Label" textAlignment="CENTER" underline="true" />
+            <Label fx:id="subjectLabelNeed" alignment="BASELINE_CENTER" prefHeight="66.0" prefWidth="168.0" styleClass="textLabel" stylesheets="@application.css" text="Label" underline="true">
+               <font>
+                  <Font name="Century Gothic" size="12.0" />
+               </font></Label>
+            <Label fx:id="levelLabelNeed" alignment="BASELINE_CENTER" prefHeight="57.0" prefWidth="171.0" styleClass="textLabel" stylesheets="@application.css" text="Label" textAlignment="CENTER" underline="true" />
+         </children>
+      </VBox>
+      <VBox fx:id="immediate" layoutX="216.0" layoutY="20.0" prefHeight="175.0" prefWidth="168.0" styleClass="immediate" stylesheets="@application.css">
+         <children>
+            <Label fx:id="taskLabelImmediate" alignment="BASELINE_CENTER" prefHeight="57.0" prefWidth="171.0" styleClass="textLabel" stylesheets="@application.css" text="Label" textAlignment="CENTER" underline="true">
+               <font>
+                  <Font name="Century Gothic" size="12.0" />
+               </font></Label>
+            <Label fx:id="whenLabelImmediate" alignment="BASELINE_CENTER" prefHeight="57.0" prefWidth="171.0" styleClass="textLabel" stylesheets="@application.css" text="Label" textAlignment="CENTER" underline="true">
+               <font>
+                  <Font name="Century Gothic" size="12.0" />
+               </font></Label>
+            <Label fx:id="subjectLabelImmediate" alignment="BASELINE_CENTER" prefHeight="66.0" prefWidth="168.0" styleClass="textLabel" stylesheets="@application.css" text="Label" underline="true">
+               <font>
+                  <Font name="Century Gothic" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="levelLabelImmediate" alignment="BASELINE_CENTER" prefHeight="66.0" prefWidth="168.0" styleClass="textLabel" stylesheets="@application.css" text="Label" textAlignment="CENTER" underline="true">
+               <font>
+                  <Font name="Century Gothic Bold" size="12.0" />
+               </font></Label>
+         </children>
+      </VBox>
+      <VBox fx:id="crucial" layoutX="412.0" layoutY="20.0" prefHeight="175.0" prefWidth="168.0" styleClass="crucial" stylesheets="@application.css">
+         <children>
+            <Label fx:id="taskLabelCrucial" alignment="BASELINE_CENTER" prefHeight="57.0" prefWidth="171.0" styleClass="textLabel" stylesheets="@application.css" text="Label" textAlignment="CENTER" underline="true">
+               <font>
+                  <Font name="Century Gothic" size="12.0" />
+               </font></Label>
+            <Label fx:id="whenLabelCrucial" alignment="BASELINE_CENTER" prefHeight="57.0" prefWidth="171.0" styleClass="textLabel" stylesheets="@application.css" text="Label" textAlignment="CENTER" underline="true" />
+            <Label fx:id="subjectLabelCrucial" alignment="BASELINE_CENTER" prefHeight="66.0" prefWidth="168.0" styleClass="textLabel" stylesheets="@application.css" text="Label" underline="true">
+               <font>
+                  <Font name="Century Gothic" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="levelLabelCrucial" alignment="BASELINE_CENTER" prefHeight="66.0" prefWidth="168.0" styleClass="textLabel" stylesheets="@application.css" text="Label" textAlignment="CENTER" underline="true" />
+         </children>
+      </VBox>
+      <Button fx:id="refreshButton" layoutX="265.0" layoutY="226.0" mnemonicParsing="false" onAction="#refresh" prefHeight="28.0" prefWidth="67.0" text="Refresh" />
+      <VBox layoutX="412.0" layoutY="319.0" prefHeight="127.0" prefWidth="168.0" styleClass="pending" stylesheets="@application.css">
+         <children>
+            <Label alignment="CENTER" prefHeight="69.0" prefWidth="168.0" text="PENDING TASK">
+               <font>
+                  <Font name="Century Gothic Bold" size="22.0" />
+               </font>
+            </Label>
+            <Label fx:id="pendingTask" alignment="CENTER" prefHeight="110.0" prefWidth="168.0" text="Label">
+               <font>
+                  <Font name="Century Gothic Bold" size="39.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+      <VBox layoutX="412.0" layoutY="459.0" prefHeight="127.0" prefWidth="168.0" styleClass="completed" stylesheets="@application.css">
+         <children>
+            <Label alignment="CENTER" prefHeight="69.0" prefWidth="168.0" text="COMPLETED">
+               <font>
+                  <Font name="Century Gothic Bold" size="22.0" />
+               </font>
+            </Label>
+            <Label fx:id="completedTask" alignment="CENTER" prefHeight="110.0" prefWidth="168.0" text="Label">
+               <font>
+                  <Font name="Century Gothic Bold" size="39.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+   </children>
+</AnchorPane>
