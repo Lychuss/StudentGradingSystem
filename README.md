@@ -91,16 +91,15 @@ CREATE TABLE test (
   total INT,
   id INT
 );
-Update database credentials in DatabaseConnection.java:
+```
 
-java
-Copy
-Edit
+Update database credentials in DatabaseConnection.java:
 con = DriverManager.getConnection(
     "jdbc:mysql://localhost:3306/studentgradingsystem", 
     "your_mysql_user", 
     "your_mysql_password"
 );
+
 💻 How to Run
 Open the project in an IDE (e.g., Eclipse or IntelliJ).
 
@@ -124,6 +123,7 @@ Notification system for deadlines
 👨‍💻 Author
 Raphael Sanjuan
 Developed after ~1.5 month of Java experience.
+Built the project in just 1 week.
 
 📃 License
 This project is open-source and free to use.
